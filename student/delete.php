@@ -1,21 +1,27 @@
 <?php
 session_start();
 
-// Get student information from URL parameters if they exist
-$student_id = isset($_GET['student_id']) ? $_GET['student_id'] : '';
-$first_name = isset($_GET['first_name']) ? $_GET['first_name'] : '';
-$last_name = isset($_GET['last_name']) ? $_GET['last_name'] : '';
+// Ensure the student data exists in the session
+if (!isset($_SESSION['students'])) {
+    $_SESSION['students'] = [];
+}
 
-// Check if the student is found in the session and if they exist in the student list
+// Get student information from the URL parameters if they exist
+$student_id = isset($_GET['id']) ? $_GET['id'] : '';
+
+// Check if the student exists in the session
 $student_index = null;
+$student_to_delete = null;
+
 foreach ($_SESSION['students'] as $index => $student) {
-    if ($student['student_id'] == $student_id) {
+    if ($student['id'] == $student_id) {  // Match by unique student ID
         $student_index = $index;
+        $student_to_delete = $student;
         break;
     }
 }
 
-// Handle delete action
+// If the student is found, handle the deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     if ($student_index !== null) {
         // Remove the student from the session array
@@ -25,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         $_SESSION['students'] = array_values($_SESSION['students']);
     }
 
-    // Redirect to the register page after deletion
+    // Redirect back to the register page after deletion
     header("Location: register.php");
     exit;
 }
@@ -44,17 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     <h2>Delete a Student</h2>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="register_student.php">Register Student</a></li>
+            <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="register.php">Register Student</a></li>
             <li class="breadcrumb-item active" aria-current="page">Delete Student</li>
         </ol>
     </nav>
     
+    <?php if ($student_to_delete): ?>
     <div class="card p-4">
         <ul>
-            <li><strong>Student ID:</strong> <?= htmlspecialchars($student_id) ?></li>
-            <li><strong>First Name:</strong> <?= htmlspecialchars($first_name) ?></li>
-            <li><strong>Last Name:</strong> <?= htmlspecialchars($last_name) ?></li>
+            <li><strong>Student ID:</strong> <?= htmlspecialchars($student_to_delete['studentID']) ?></li>
+            <li><strong>First Name:</strong> <?= htmlspecialchars($student_to_delete['firstName']) ?></li>
+            <li><strong>Last Name:</strong> <?= htmlspecialchars($student_to_delete['lastName']) ?></li>
         </ul>
         
         <form method="POST">
@@ -62,6 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             <button type="submit" name="confirm_delete" class="btn btn-danger">Delete Student Record</button>
         </form>
     </div>
+    <?php else: ?>
+        <p class="alert alert-warning">Student not found.</p>
+    <?php endif; ?>
+
 </div>
 
 </body>

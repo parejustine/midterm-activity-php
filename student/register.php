@@ -118,11 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <td><?php echo htmlspecialchars($student['studentID']); ?></td>
                             <td><?php echo htmlspecialchars($student['firstName']); ?></td>
                             <td><?php echo htmlspecialchars($student['lastName']); ?></td>
-                        <td>
-                        <a href="edit.php?id=<?php echo $student['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="delete.php?id=<?php echo $student['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-
+                            <td>
+                                <a href="edit.php?id=<?php echo $student['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <!-- The delete button remains a simple link passing the student ID -->
+                                <a href="delete.php?id=<?php echo $student['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>

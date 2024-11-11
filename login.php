@@ -10,11 +10,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
 // Predefined email and password for multiple users
 $accounts = [
-    "parejustine@gmail.com" => "pass123",
-    "Just@example.com" => "justpass",
-    "kew@example.com" => "password",
-    "sigma@example.com" => "boots",
-    "wew@example.com" => "wewpass"
+    "user1@gmail.com" => "password",
+    "user2@gmail.com" => "password",
+    "user3@gmail.com" => "password",
+    "user4@gmail.com" => "password",
+    "user5@gmail.com" => "password"
 ];
 
 
